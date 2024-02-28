@@ -32,17 +32,11 @@ public class Connection {
 
 	public void send(TransportMessage message) {
 
-		// TODO 
-		// encapsulate the data contained in the message and write to the output stream
-		
 		try {
-
 			byte[] sendbuf = message.encapsulate();
 
 			outStream.write(sendbuf);
-
 		} catch (IOException ex) {
-
 			System.out.println("Connection: " + ex.getMessage());
 			ex.printStackTrace();
 		}
@@ -50,15 +44,11 @@ public class Connection {
 	}
 
 	public boolean hasData () {
-		
 		boolean hasdata = false;
 		
 		try {
-			
 			hasdata = inStream.available() > 0;
-			
 		} catch (IOException ex) {
-
 			System.out.println("Connection: " + ex.getMessage());
 			ex.printStackTrace();
 		}

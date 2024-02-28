@@ -77,7 +77,7 @@ public class Dispatcher extends Stopable {
 		default:
 			Logger.log("broker dispatch - unhandled message type");
 			break;
-
+			
 		}
 	}
 
@@ -92,11 +92,9 @@ public class Dispatcher extends Stopable {
 
 	// called by dispatch upon receiving a disconnect message
 	public void onDisconnect(DisconnectMsg msg) {
-		String user = msg.getUser();
-
 		Logger.log("onDisconnect:" + msg.toString());
 
-		storage.removeClientSession(user);
+		storage.removeClientSession(msg.getUser());
 	}
 
 	public void onCreateTopic(CreateTopicMsg msg) {
@@ -126,8 +124,10 @@ public class Dispatcher extends Stopable {
 	public void onPublish(PublishMsg msg) {
 		Logger.log("onPublish:" + msg.toString());
 
-		storage.getSubscribers(msg.getTopic()).forEach(subscriber -> {
-			storage.getSession(subscriber).send(msg);
+		Set<String> subscribers = storage.getSubscribers(msg.getTopic());
+		
+		subscribers.forEach(user -> {
+			storage.getSession(user).send(msg);
 		});
 	}
 }
